@@ -1,75 +1,17 @@
 import assert from 'node:assert/strict';
-import { execFile, spawn } from 'node:child_process';
-import { once } from 'node:events';
-import { mkdtemp, readdir, rm } from 'node:fs/promises';
-import { tmpdir } from 'node:os';
+import { execFile } from 'node:child_process';
+import { readdir } from 'node:fs/promises';
 import { join } from 'node:path';
-import { createInterface } from 'node:readline';
 import { DatabaseSync } from 'node:sqlite';
 import { test } from 'node:test';
 import { fileURLToPath } from 'node:url';
 import { promisify } from 'node:util';
+import { temporaryData, startServer, session } from './helpers/server.mjs';
 
 const run = promisify(execFile);
 const root = fileURLToPath(new URL('..', import.meta.url));
 const defaults = { username: 'steward', password: 'cooksagain' };
 const original = { username: 'family-cook', password: 'Original family password' };
-
-async function temporaryData(t) {
-  const directory = await mkdtemp(join(tmpdir(), 'stew-recovery-test-'));
-  const stops = [];
-  t.after(async () => {
-    await Promise.all(stops.map((stop) => stop()));
-    await rm(directory, { recursive: true, force: true });
-  });
-  return { directory, stops };
-}
-
-async function startServer(data) {
-  const server = spawn(process.execPath, ['server.mjs'], {
-    cwd: root,
-    env: {
-      ...process.env, HOST: '127.0.0.1', PORT: '0', DATA_DIR: data.directory,
-      SECURE_COOKIES: '', MAX_IMPORT_BYTES: '', MAX_IMAGE_BYTES: '',
-    },
-    stdio: ['ignore', 'pipe', 'pipe'],
-  });
-  let stderr = '';
-  server.stderr.setEncoding('utf8').on('data', (chunk) => { stderr += chunk; });
-  const exited = once(server, 'exit');
-  const stop = async () => {
-    if (server.exitCode === null && server.signalCode === null) server.kill();
-    await exited;
-  };
-  data.stops.push(stop);
-  const stdout = createInterface({ input: server.stdout });
-  try {
-    const [line] = await Promise.race([
-      once(stdout, 'line', { signal: AbortSignal.timeout(5000) }),
-      exited.then(([code]) => { throw new Error(`Server exited with code ${code}. ${stderr}`); }),
-    ]);
-    const origin = line.match(/http:\/\/127\.0\.0\.1:\d+/)?.[0];
-    assert.ok(origin, line);
-    const request = async (path, status, { method = 'GET', body, cookie } = {}) => {
-      const response = await fetch(origin + path, {
-        method,
-        headers: { ...(body !== undefined && { 'Content-Type': 'application/json' }), ...(cookie && { Cookie: cookie }) },
-        body: body === undefined ? undefined : JSON.stringify(body),
-        signal: AbortSignal.timeout(5000),
-      });
-      if (status !== undefined) assert.equal(response.status, status, `${method} ${path}`);
-      return response;
-    };
-    const post = (path, status, body, cookie) => request(path, status, { method: 'POST', body, cookie });
-    return { request, post, stop };
-  } finally {
-    stdout.close();
-  }
-}
-
-function session(response) {
-  return response.headers.get('set-cookie').split(';', 1)[0];
-}
 
 async function configure(server) {
   const login = await server.post('/api/auth/login', 200, defaults);

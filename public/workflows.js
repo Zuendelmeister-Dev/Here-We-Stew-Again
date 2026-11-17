@@ -180,6 +180,10 @@ function editorDraft(state) {
       photoError: '',
     };
   }
+  // A category can be deleted from the sidebar while this draft stays open.
+  if (state.editor.categoryId && !state.book.categories.some(({ id }) => id === state.editor.categoryId)) {
+    state.editor.categoryId = '';
+  }
   return state.editor;
 }
 
@@ -544,7 +548,7 @@ export function bindWorkflows(root, state, helpers) {
   }
 
   function showError(error) {
-    toast(error?.message || 'Could not save the change.');
+    toast(error?.message || 'Could not save the change.', 'error');
   }
 
   function editorError(draft, message) {

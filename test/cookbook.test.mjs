@@ -1,74 +1,15 @@
 import assert from 'node:assert/strict';
-import { spawn } from 'node:child_process';
-import { once } from 'node:events';
-import { mkdtemp, readdir, readFile, rm } from 'node:fs/promises';
-import { tmpdir } from 'node:os';
+import { readdir, readFile } from 'node:fs/promises';
 import { join } from 'node:path';
-import { createInterface } from 'node:readline';
 import { DatabaseSync } from 'node:sqlite';
 import { test } from 'node:test';
 import { fileURLToPath } from 'node:url';
 import { BookStore } from '../lib/store.mjs';
+import { temporaryData, startServer, session } from './helpers/server.mjs';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
 const defaultCredentials = { username: 'steward', password: 'cooksagain' };
 const examples = join(root, 'examples');
-
-async function temporaryData(t) {
-  const directory = await mkdtemp(join(tmpdir(), 'here-we-stew-test-'));
-  const stops = [];
-  t.after(async () => {
-    await Promise.all(stops.map((stop) => stop()));
-    await rm(directory, { recursive: true, force: true });
-  });
-  return { directory, stops };
-}
-
-async function startServer(data, secureCookies = '0') {
-  const server = spawn(process.execPath, ['server.mjs'], {
-    cwd: root,
-    env: {
-      ...process.env, HOST: '127.0.0.1', PORT: '0', DATA_DIR: data.directory,
-      SECURE_COOKIES: secureCookies, MAX_IMPORT_BYTES: '', MAX_IMAGE_BYTES: '',
-    },
-    stdio: ['ignore', 'pipe', 'pipe'],
-  });
-  let stderr = '';
-  server.stderr.setEncoding('utf8').on('data', (chunk) => { stderr += chunk; });
-  const exited = once(server, 'exit');
-  const stop = async () => {
-    if (server.exitCode === null && server.signalCode === null) server.kill();
-    await exited;
-  };
-  data.stops.push(stop);
-  const stdout = createInterface({ input: server.stdout });
-  try {
-    const [line] = await Promise.race([
-      once(stdout, 'line', { signal: AbortSignal.timeout(5000) }),
-      exited.then(([code]) => { throw new Error(`Server exited with code ${code}. ${stderr}`); }),
-    ]);
-    const origin = line.match(/http:\/\/127\.0\.0\.1:\d+/)?.[0];
-    assert.ok(origin, line);
-    const request = async (path, status, { method = 'GET', body, cookie } = {}) => {
-      const response = await fetch(origin + path, {
-        method,
-        headers: { ...(body !== undefined && { 'Content-Type': 'application/json' }), ...(cookie && { Cookie: cookie }) },
-        body: body === undefined ? undefined : JSON.stringify(body),
-        signal: AbortSignal.timeout(5000),
-      });
-      if (status !== undefined) assert.equal(response.status, status, `${method} ${path}`);
-      return response;
-    };
-    const post = (path, status, body, cookie) => request(path, status, { method: 'POST', body, cookie });
-    return { request, post, stop };
-  } finally {
-    stdout.close();
-  }
-}
-
-function session(response) {
-  return response.headers.get('set-cookie').split(';', 1)[0];
-}
 
 async function completeSetup(server, credentials = defaultCredentials) {
   const login = await server.post('/api/auth/login', 200, defaultCredentials);
@@ -179,11 +120,14 @@ test('example files import individually or together and round-trip through a coo
   for (const file of recipeFiles) {
     const example = JSON.parse(await readFile(join(file.parentPath, file.name), 'utf8'));
     assert.equal(example.recipes.length, 1, file.name);
+    assert.equal(example.recipes[0].images.length, 1, `${file.name} includes its cover photo`);
     const { recipeId, importedRecipes, importedCategories } = await (await post('/api/import?mode=recipe', 200, example, cookie)).json();
     assert.equal(importedRecipes, 1, file.name);
     assert.equal(importedCategories, 0, file.name);
     recipeIds.add(recipeId);
     assert.deepEqual(example.recipes[0], demo.recipes.find(({ id }) => id === recipeId));
+    const imported = await (await request(`/api/recipes/${recipeId}/export`, 200, { cookie })).json();
+    assert.equal(imported.recipes[0].images[0].dataUrl, example.recipes[0].images[0].dataUrl);
   }
   assert.equal(recipeIds.size, demo.recipes.length);
   const beforeMerge = await (await request('/api/book', 200, { cookie })).json();
@@ -283,4 +227,88 @@ test('recipe ratings can be updated and cleared independently', async (t) => {
   assert.deepEqual(await getRecipe(recipe.id), { ...recipe, rating: 5 });
   assert.deepEqual(await (await updateRating({ rating: null })).json(), { rating: null });
   assert.deepEqual(await getRecipe(recipe.id), { ...recipe, rating: null });
+});
+
+test('category and recipe CRUD preserve ownership, roll back failed edits and cascade deletion', async (t) => {
+  const { request, post } = await startServer(await temporaryData(t));
+  const cookie = await completeSetup({ post });
+  const book = async () => (await request('/api/book', 200, { cookie })).json();
+  const category = await (await post('/api/categories', 201, { name: 'Garden', icon: 'salad' }, cookie)).json();
+  await post('/api/categories', 409, { name: ' garden ' }, cookie);
+  await request(`/api/categories/${category.id}`, 200, { method: 'PUT', body: { name: 'Harvest' }, cookie });
+  assert.deepEqual((await book()).categories.find(({ id }) => id === category.id), { ...category, name: 'Harvest' });
+  await request('/api/categories/missing', 404, { method: 'PUT', body: { name: 'Missing' }, cookie });
+
+  const photo = await readFile(join(root, 'public', 'images', 'tomatensuppe.jpg'));
+  const recipe = { title: 'Garden soup', categoryId: category.id, images: [
+    { name: 'Soup', dataUrl: `data:image/jpeg;base64,${photo.toString('base64')}` },
+  ] };
+  const { id } = await (await post('/api/recipes', 201, recipe, cookie)).json();
+  const original = (await book()).recipes.find((entry) => entry.id === id);
+  const ownImage = original.images[0];
+  const foreignImage = (await book()).recipes.find((entry) => entry.id !== id && entry.images.length).images[0];
+  for (const images of [[ownImage, ownImage], [foreignImage], [{ name: 'Bad', dataUrl: 'data:image/png;base64,AAAA' }]]) {
+    await request(`/api/recipes/${id}`, 400, { method: 'PUT', cookie, body: { ...recipe, title: 'Must roll back', images } });
+    assert.deepEqual((await book()).recipes.find((entry) => entry.id === id), original);
+  }
+  await request(foreignImage.url, 200, { cookie });
+
+  const cooked = `/api/recipes/${id}/cooked`;
+  await post(cooked, 400, { date: '2026-02-29' }, cookie);
+  await post(cooked, 204, { date: '2026-11-17' }, cookie);
+  await post(cooked, 204, { date: '2026-11-17' }, cookie);
+  assert.equal((await book()).history.filter((entry) => entry.recipeId === id).length, 1);
+  await request(`/api/categories/${category.id}`, 204, { method: 'DELETE', cookie });
+  assert.equal((await book()).recipes.find((entry) => entry.id === id).categoryId, null);
+  await request(`/api/categories/${category.id}`, 404, { method: 'DELETE', cookie });
+
+  const imageHead = await request(ownImage.url, 200, { method: 'HEAD', cookie });
+  assert.equal(imageHead.headers.get('content-length'), String(photo.byteLength));
+  assert.equal((await imageHead.arrayBuffer()).byteLength, 0);
+  await request(`/api/recipes/${id}`, 204, { method: 'DELETE', cookie });
+  const remaining = await book();
+  assert.ok(!remaining.recipes.some((entry) => entry.id === id));
+  assert.ok(!remaining.history.some((entry) => entry.recipeId === id));
+  await request(ownImage.url, 404, { cookie });
+  await request(`/api/recipes/${id}`, 404, { method: 'DELETE', cookie });
+  await request(`/api/recipes/${id}`, 404, { method: 'PUT', body: { title: 'Missing' }, cookie });
+  await request(`/api/recipes/${id}/export`, 404, { cookie });
+  await post(`/api/recipes/${id}/cooked`, 404, { date: '2026-11-17' }, cookie);
+});
+
+test('HTTP rejects malformed, oversized and unsupported requests while keeping the server usable', async (t) => {
+  const { request, post } = await startServer(await temporaryData(t), '0', { MAX_IMPORT_BYTES: '128' });
+  const cookie = await completeSetup({ post });
+  const jsonHeaders = { 'Content-Type': 'application/json' };
+  await request('/api/categories', 415, { method: 'POST', rawBody: '{}', cookie });
+  await request('/api/categories', 400, { method: 'POST', rawBody: '{broken', headers: jsonHeaders, cookie });
+  await request('/api/categories', 400, { method: 'POST', body: [], cookie });
+  await request('/api/categories', 413, { method: 'POST', rawBody: JSON.stringify({ name: 'x'.repeat(16 * 1024) }), headers: jsonHeaders, cookie });
+  await request('/api/import', 413, { method: 'POST', rawBody: ' '.repeat(129), headers: jsonHeaders, cookie });
+  // An async body has no Content-Length, exercising the streaming size limit.
+  await request('/api/import', 413, {
+    method: 'POST', rawBody: new Blob([' '.repeat(129)]).stream(), headers: jsonHeaders, cookie,
+  });
+  await post('/api/import?mode=unknown', 400, {}, cookie);
+  await request('/api/unknown', 404, { cookie });
+  for (const [path, method, allow] of [
+    ['/api/health', 'POST', 'GET'], ['/api/auth/login', 'GET', 'POST'],
+    ['/api/book', 'POST', 'GET'], ['/api/export', 'POST', 'GET'],
+    ['/api/import', 'GET', 'POST'], ['/api/categories', 'GET', 'POST'],
+    ['/api/categories/missing', 'GET', 'PUT, DELETE'], ['/api/recipes', 'GET', 'POST'],
+    ['/api/recipes/missing', 'GET', 'PUT, DELETE'], ['/api/recipes/missing/cooked', 'GET', 'POST, DELETE'],
+    ['/api/recipes/missing/rating', 'GET', 'PATCH'], ['/api/recipes/missing/export', 'POST', 'GET'],
+    ['/api/images/missing', 'POST', 'GET, HEAD'], ['/', 'POST', 'GET, HEAD'],
+  ]) {
+    const response = await request(path, 405, { method, cookie });
+    assert.equal(response.headers.get('allow'), allow, `${method} ${path}`);
+  }
+  for (const path of ['/%2e%2e%2fpackage.json', '/%5cpackage.json', '/%00.json', '/missing.js', '/%ZZ']) {
+    await request(path, path === '/%ZZ' ? 400 : 404);
+  }
+  const head = await request('/', 200, { method: 'HEAD' });
+  assert.equal((await head.arrayBuffer()).byteLength, 0);
+  assert.equal(head.headers.get('x-content-type-options'), 'nosniff');
+  assert.match(head.headers.get('content-security-policy'), /object-src 'none'/);
+  assert.equal((await request('/api/book', 200, { cookie })).headers.get('cache-control'), 'no-store');
 });

@@ -5,6 +5,8 @@
 .env.*
 data
 node_modules
+.coverage*
+coverage
 *.log
 kochbuch-*.json
 cookbook-*.json

@@ -43,6 +43,8 @@ Open [http://localhost:3000](http://localhost:3000). Use `npm run dev` to restar
 2. Choose your username and a new password, then select **Save and open cookbook**.
 3. Use your saved credentials for future sign-ins.
 
+Complete setup before allowing access from other devices. Use HTTPS through a reverse proxy when making the app available over the internet.
+
 Each installation has one shared account. The password is stored as a salted hash in SQLite. A session ends when you sign out, after 12 hours or when the server restarts.
 
 ### Recover a forgotten username or password
@@ -103,7 +105,7 @@ Run `docker inspect --format '{{json .Mounts}}' herewestewagain` to find the vol
 
 ## Example recipes and cookbook
 
-A new database starts with **Roasted Tomato Soup**, **Burrata with Roasted Tomatoes** and **Lemon and Herb Pasta**. The following files in [`examples/`](examples/) are additional example data for trying the import tools.
+A new database starts with **Roasted Tomato Soup**, **Burrata with Roasted Tomatoes** and **Lemon and Herb Pasta**. The following files in [`examples/`](examples/) are additional example data for trying the import tools. Each example recipe includes an embedded cover photo, both in the individual file and in the complete example cookbook.
 
 An existing database keeps its saved recipe text and category names when you upgrade to the English interface.
 
@@ -153,13 +155,9 @@ For Docker Compose, put settings in a `.env` file beside `compose.yaml`. When ru
 | `COOKBOOK_PORT` | Docker Compose | `3000` | Port published on the host. |
 | `HOST`, `PORT` | Node.js | `127.0.0.1`, `3000` | Server bind address and port. |
 | `DATA_DIR` | Node.js | `data` in the project directory | Directory that holds `kochbuch.sqlite`. Run one server process per data directory. |
-| `MAX_IMAGE_BYTES` | Both | `8388608` (8 MiB) | Maximum size per photo, in bytes. |
+| `MAX_IMAGE_BYTES` | Both | `8388608` (8 MiB) | Maximum size per photo, in bytes. You can raise it to 24 MiB. |
 | `MAX_IMPORT_BYTES` | Both | `268435456` (256 MiB) | Maximum size of a JSON import, in bytes. You can raise it to 500 MiB. |
 | `SECURE_COOKIES` | Both | Off | Set to `1` when serving the app over HTTPS through a reverse proxy to restrict the session cookie to HTTPS. |
-
-## Publishing
-
-To publish the source code and container image, follow the [GitHub and Docker Hub publishing guide](docs/publishing.md).
 
 ## Tests
 
@@ -167,4 +165,16 @@ To publish the source code and container image, follow the [GitHub and Docker Hu
 npm test
 ```
 
-You can also run the tests directly with `node --test`. They start local servers with temporary SQLite databases and cover initial account setup, sign-in and sign-out, temporary account recovery, protected endpoints, database upgrades, example imports, backup and restore, and cooking history.
+The suite uses temporary SQLite databases and local HTTP servers. It covers account setup, session expiry and login throttling, recovery, protected endpoints, database upgrades, recipe and category changes, image ownership and deletion, failed-edit rollback, JSON validation and size limits, imports and exports including photo bytes, cooking history, recipe sorting and editor regressions.
+
+To see coverage for the modules exercised by the tests, run:
+
+```sh
+npm run test:coverage
+```
+
+Coverage includes the server subprocesses. Browser interactions and visual layout still need browser testing; the Node.js suite does not exercise every frontend interaction.
+
+## License
+
+This project, including the bundled examples and artwork, is released under the [MIT License](LICENSE). The recipe and background artwork was generated with AI for this project.

@@ -1,5 +1,12 @@
 /data/
 /node_modules/
+/.agents/
+/.codex/
+/.coverage*/
+/coverage/
+.DS_Store
+Thumbs.db
+Desktop.ini
 /.env
 /.env.*
 !/.env.example
