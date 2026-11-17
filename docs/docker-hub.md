@@ -16,4 +16,16 @@ Open [http://localhost:3000](http://localhost:3000), sign in with `steward` and 
 
 Recipes, photos, cooking history and account settings are stored in SQLite at `/app/data/kochbuch.sqlite`. The `herewestewagain-data` volume in the example preserves them across container replacements.
 
+## Recover forgotten credentials
+
+Create a temporary recovery account from the Docker host's command line.
+
+```sh
+docker exec herewestewagain node recovery.mjs
+```
+
+Sign in on the usual app page with the generated username and password, then save the new username and password for the regular account. Saving them removes the recovery account and ends all earlier sessions. The command can run while the app is running.
+
+Each installation has at most one pending recovery account. Running the command again replaces it and invalidates its previous credentials and reset sessions. The credentials persist across restarts until a successful reset or another creation command. Browser reset sessions last 15 minutes. Full details are in the source documentation.
+
 [Source code and documentation](https://github.com/GITHUB_OWNER/herewestewagain)

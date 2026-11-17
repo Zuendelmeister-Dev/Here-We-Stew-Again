@@ -127,6 +127,7 @@ test('database upgrades preserve recipes and configured credentials survive rest
   previous.setCooked(recipeId, '2026-11-14', true);
   previous.database.exec(`
     DROP TABLE account;
+    DROP TABLE recovery_account;
     ALTER TABLE recipes DROP COLUMN difficulty;
     ALTER TABLE recipes DROP COLUMN rating;
     PRAGMA user_version = 2;

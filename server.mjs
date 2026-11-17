@@ -295,7 +295,10 @@ const server = createServer(async (request, response) => {
       request.resume();
     }
     if (error instanceof HttpError) {
-      sendJson(response, error.status, { error: error.message });
+      sendJson(response, error.status, {
+        error: error.message,
+        ...(error.recoveryRequired && { recoveryRequired: true }),
+      });
       return;
     }
     console.error(error);

@@ -9,6 +9,7 @@
   "scripts": {
     "start": "node server.mjs",
     "dev": "node --watch server.mjs",
+    "recovery:create": "node recovery.mjs",
     "test": "node --test"
   }
 }

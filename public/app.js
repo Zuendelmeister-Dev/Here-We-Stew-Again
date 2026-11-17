@@ -63,7 +63,7 @@ async function request(method, path, body) {
     error.status = response.status;
     if (!path.startsWith('/api/auth/')) {
       if (response.status === 401) showAuth('login');
-      if (response.status === 403) showAuth('setup');
+      if (response.status === 403) showAuth(result?.recoveryRequired ? 'recovery' : 'setup');
     }
     throw error;
   }
@@ -344,14 +344,16 @@ function showAuth(view) {
   main.querySelector('[name="username"]')?.focus();
 }
 
-function renderAuth(setup) {
+function renderAuth(view) {
+  const recovery = view === 'recovery';
+  const setup = view === 'setup' || recovery;
   main.innerHTML = `<section class="auth-card" aria-labelledby="auth-title">
     <div class="brand"><img class="brand-mark" src="/images/kuechenchronik.svg" width="40" height="40" alt="">Here We Stew Again</div>
-    <h1 id="auth-title">${setup ? 'Set up your credentials' : 'Sign in'}</h1>
-    ${setup ? '<p class="muted">Set your username and password. You can re-enter the current values.</p>' : ''}
+    <h1 id="auth-title">${recovery ? 'Reset your credentials' : setup ? 'Set up your credentials' : 'Sign in'}</h1>
+    ${recovery ? '<p class="muted">Choose the username and password for your cookbook account. Saving them removes this emergency access and signs out existing sessions.</p>' : setup ? '<p class="muted">Set your username and password. You can re-enter the current values.</p>' : ''}
     <form id="auth-form" method="post">
-      <label class="field">Username<input name="username" autocomplete="username" autocapitalize="none" spellcheck="false" maxlength="80" required></label>
-      <label class="field">Password<input name="password" type="password" autocomplete="${setup ? 'new-password' : 'current-password'}" maxlength="256" required></label>
+      <label class="field">${recovery ? 'New username' : 'Username'}<input name="username" autocomplete="username" autocapitalize="none" spellcheck="false" maxlength="80" required></label>
+      <label class="field">${recovery ? 'New password' : 'Password'}<input name="password" type="password" autocomplete="${setup ? 'new-password' : 'current-password'}" maxlength="256" required></label>
       <p class="form-error" role="alert" hidden></p>
       <div class="auth-actions">
         <button type="submit" class="button button-primary">${setup ? 'Save and open cookbook' : 'Sign in'}</button>
@@ -362,7 +364,7 @@ function renderAuth(setup) {
 }
 
 async function submitAuth(form) {
-  const setup = state.auth === 'setup';
+  const setup = state.auth === 'setup' || state.auth === 'recovery';
   const submit = form.querySelector('button[type="submit"]');
   if (submit.disabled) return;
   const buttons = form.querySelectorAll('button');
@@ -371,10 +373,10 @@ async function submitAuth(form) {
   const error = form.querySelector('.form-error');
   error.hidden = true;
   try {
-    const { setupRequired } = await request('POST', setup ? '/api/auth/setup' : '/api/auth/login', {
+    const { setupRequired, recoveryRequired } = await request('POST', setup ? '/api/auth/setup' : '/api/auth/login', {
       username: fields.get('username'), password: fields.get('password'),
     });
-    if (setupRequired) showAuth('setup');
+    if (setupRequired) showAuth(recoveryRequired ? 'recovery' : 'setup');
     else {
       state.auth = 'checking';
       await loadBook();
@@ -416,7 +418,7 @@ function render() {
     renderTopbar();
     renderSidebar();
   } else if (state.auth !== 'checking') {
-    renderAuth(state.auth === 'setup');
+    renderAuth(state.auth);
     return;
   }
   if (state.loading) {
@@ -606,7 +608,7 @@ async function loadBook() {
   render();
   try { await refresh(); }
   catch (error) {
-    if (state.auth === 'login' || state.auth === 'setup') return;
+    if (['login', 'setup', 'recovery'].includes(state.auth)) return;
     state.loading = false;
     state.error = error.message;
     render();

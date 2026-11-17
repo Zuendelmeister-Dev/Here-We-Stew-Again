@@ -45,6 +45,36 @@ Open [http://localhost:3000](http://localhost:3000). Use `npm run dev` to restar
 
 Each installation has one shared account. The password is stored as a salted hash in SQLite. A session ends when you sign out, after 12 hours or when the server restarts.
 
+### Recover a forgotten username or password
+
+Someone with command-line access to the installation can create a temporary recovery account. The command prints a randomly generated username and password. The recovery account is created only when you run this command.
+
+For the running Docker container, use either command.
+
+```sh
+docker exec herewestewagain node recovery.mjs
+```
+
+```sh
+docker compose exec cookbook node recovery.mjs
+```
+
+For a Node.js installation, run the following in the project directory with the same `DATA_DIR` environment setting as the app.
+
+```sh
+npm run recovery:create
+```
+
+1. Copy the generated username and password from the terminal.
+2. Open the app's usual sign-in page. Sign out of an existing session if needed, then sign in with the recovery credentials.
+3. Enter the username and password you want for the regular shared account and save them.
+
+The recovery account can open the credential reset screen. Saving the new credentials removes the recovery account and ends all previous sessions. You can then use the newly saved credentials to sign in. Creating a recovery account leaves the regular account usable while recovery is pending.
+
+There is at most one recovery account per installation. Running the command again replaces its credentials and immediately invalidates its earlier reset sessions. Recovery credentials remain valid across app restarts until a successful reset or another creation command. A browser reset session lasts 15 minutes and ends on restart. If that session expires, sign in again with the current recovery credentials.
+
+The command requires an existing cookbook with a configured account. The recovery password is stored as a salted hash in the same SQLite database as the regular account. Full data-directory backups also include a pending recovery account. JSON recipe and cookbook exports contain cookbook content.
+
 ## Data storage
 
 The SQLite database `kochbuch.sqlite` contains your recipes, categories, uploaded photos, cooking history and shared sign-in account.
@@ -137,4 +167,4 @@ To publish the source code and container image, follow the [GitHub and Docker Hu
 npm test
 ```
 
-You can also run the tests directly with `node --test`. They start local servers with temporary SQLite databases and cover initial account setup, sign-in and sign-out, protected endpoints, database upgrades, example imports, backup and restore, and cooking history.
+You can also run the tests directly with `node --test`. They start local servers with temporary SQLite databases and cover initial account setup, sign-in and sign-out, temporary account recovery, protected endpoints, database upgrades, example imports, backup and restore, and cooking history.
