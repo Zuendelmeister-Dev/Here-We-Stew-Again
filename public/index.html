@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f8f5ee">
+  <meta name="description" content="A personal cookbook for recipes, kitchen notes and your cooking calendar.">
+  <title>Here We Stew Again · My Cookbook</title>
+  <link rel="icon" type="image/svg+xml" sizes="any" href="/images/kuechenchronik.svg">
+  <script src="/theme.js"></script>
+  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/hero.css">
+  <link rel="stylesheet" href="/dark.css">
+  <script type="module" src="/app.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <header class="topbar" id="topbar" hidden></header>
+  <div class="book-shell auth-shell">
+    <aside class="sidebar" id="sidebar" aria-label="Cookbook categories" hidden></aside>
+    <main id="main-content" tabindex="-1" aria-busy="true">
+      <p class="loading">Opening the cookbook…</p>
+    </main>
+  </div>
+  <div id="toasts" class="toasts" role="status" aria-live="polite"></div>
+  <dialog id="modal" class="modal" aria-labelledby="modal-title"></dialog>
+</body>
+</html>

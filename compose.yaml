@@ -1,0 +1,17 @@
+services:
+  cookbook:
+    container_name: herewestewagain
+    build: .
+    init: true
+    restart: unless-stopped
+    environment:
+      - MAX_IMAGE_BYTES
+      - MAX_IMPORT_BYTES
+      - SECURE_COOKIES
+    ports:
+      - "${COOKBOOK_BIND_IP:-${KOCHBUCH_BIND_IP:-127.0.0.1}}:${COOKBOOK_PORT:-${KOCHBUCH_PORT:-3000}}:3000"
+    volumes:
+      - kochbuch-daten:/app/data
+
+volumes:
+  kochbuch-daten:

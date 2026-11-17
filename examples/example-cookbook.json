@@ -1,0 +1,245 @@
+{
+  "format": "here-we-stew-again",
+  "version": 1,
+  "exportedAt": "2026-11-17T12:00:00.000Z",
+  "categories": [
+    {
+      "id": "example-breakfast",
+      "name": "Breakfast",
+      "icon": "breakfast"
+    },
+    {
+      "id": "example-salads",
+      "name": "Salads",
+      "icon": "salad"
+    },
+    {
+      "id": "example-desserts",
+      "name": "Desserts",
+      "icon": "dessert"
+    }
+  ],
+  "recipes": [
+    {
+      "id": "example-blueberry-overnight-oats",
+      "categoryId": "example-breakfast",
+      "title": "Blueberry Overnight Oats",
+      "description": "Oats, yoghurt and blueberries ready straight from the fridge.",
+      "ingredients": [
+        "60 g rolled oats",
+        "120 ml milk",
+        "2 tbsp plain yoghurt",
+        "1 tsp maple syrup",
+        "80 g blueberries"
+      ],
+      "steps": [
+        {
+          "text": "Stir the oats, milk, yoghurt and maple syrup together in a jar.",
+          "minutes": 0
+        },
+        {
+          "text": "Cover and refrigerate overnight. Stir again and top with blueberries before serving.",
+          "minutes": 0
+        }
+      ],
+      "notes": "Loosen with a splash of milk if the oats are too thick.",
+      "createdAt": "2026-11-01T12:00:00.000Z",
+      "updatedAt": "2026-11-01T12:00:00.000Z",
+      "images": []
+    },
+    {
+      "id": "example-mushroom-and-spinach-toast",
+      "categoryId": "example-breakfast",
+      "title": "Mushroom and Spinach Toast",
+      "description": "Buttery mushrooms and wilted spinach on toasted sourdough.",
+      "ingredients": [
+        "200 g mushrooms",
+        "1 tbsp butter",
+        "1 garlic clove",
+        "2 handfuls baby spinach",
+        "2 slices sourdough",
+        "Salt and black pepper"
+      ],
+      "steps": [
+        {
+          "text": "Slice the mushrooms. Fry them in the butter over medium-high heat until golden.",
+          "minutes": 7
+        },
+        {
+          "text": "Add the chopped garlic and spinach. Stir until the spinach wilts, then season.",
+          "minutes": 2
+        },
+        {
+          "text": "Toast the bread and spoon the mushrooms and spinach over it.",
+          "minutes": 0
+        }
+      ],
+      "notes": "A squeeze of lemon brightens the mushrooms.",
+      "createdAt": "2026-11-01T12:00:00.000Z",
+      "updatedAt": "2026-11-01T12:00:00.000Z",
+      "images": []
+    },
+    {
+      "id": "example-lemon-chickpea-salad",
+      "categoryId": "example-salads",
+      "title": "Lemon Chickpea Salad",
+      "description": "A bright pantry salad with cucumber, parsley and a lemon dressing.",
+      "ingredients": [
+        "1 can chickpeas, drained",
+        "1/2 cucumber",
+        "150 g cherry tomatoes",
+        "1 handful parsley",
+        "2 tbsp olive oil",
+        "1 tbsp lemon juice",
+        "Salt and black pepper"
+      ],
+      "steps": [
+        {
+          "text": "Dice the cucumber, halve the tomatoes and chop the parsley.",
+          "minutes": 0
+        },
+        {
+          "text": "Whisk the olive oil and lemon juice with salt and pepper. Toss with the chickpeas and vegetables.",
+          "minutes": 0
+        }
+      ],
+      "notes": "Add crumbled feta just before serving if you like.",
+      "createdAt": "2026-11-01T12:00:00.000Z",
+      "updatedAt": "2026-11-01T12:00:00.000Z",
+      "images": []
+    },
+    {
+      "id": "example-warm-beetroot-and-lentil-salad",
+      "categoryId": "example-salads",
+      "title": "Warm Beetroot and Lentil Salad",
+      "description": "Earthy beetroot, green lentils and a sharp mustard dressing.",
+      "ingredients": [
+        "250 g cooked beetroot",
+        "250 g cooked green lentils",
+        "1 tbsp olive oil",
+        "1 tbsp red wine vinegar",
+        "1 tsp Dijon mustard",
+        "1 handful rocket",
+        "30 g walnuts"
+      ],
+      "steps": [
+        {
+          "text": "Cut the beetroot into wedges and warm it with the lentils in a frying pan over medium heat.",
+          "minutes": 5
+        },
+        {
+          "text": "Whisk the olive oil, vinegar and mustard. Toss with the warm lentils and beetroot, then fold in the rocket and walnuts.",
+          "minutes": 0
+        }
+      ],
+      "notes": "Swap walnuts for pumpkin seeds if you prefer.",
+      "createdAt": "2026-11-01T12:00:00.000Z",
+      "updatedAt": "2026-11-01T12:00:00.000Z",
+      "images": []
+    },
+    {
+      "id": "example-apple-and-oat-crumble",
+      "categoryId": "example-desserts",
+      "title": "Apple and Oat Crumble",
+      "description": "Soft cinnamon apples under a crisp oat topping.",
+      "ingredients": [
+        "4 apples",
+        "1 tsp ground cinnamon",
+        "75 g cold butter",
+        "80 g plain flour",
+        "50 g rolled oats",
+        "55 g brown sugar"
+      ],
+      "steps": [
+        {
+          "text": "Heat the oven to 190°C. Peel and slice the apples, then toss them with the cinnamon in a baking dish.",
+          "minutes": 0
+        },
+        {
+          "text": "Rub the butter into the flour. Stir in the oats and sugar, then scatter the mixture over the apples.",
+          "minutes": 0
+        },
+        {
+          "text": "Bake until the topping is golden and the apples are tender.",
+          "minutes": 30
+        }
+      ],
+      "notes": "Serve warm with plain yoghurt, custard or ice cream.",
+      "createdAt": "2026-11-01T12:00:00.000Z",
+      "updatedAt": "2026-11-01T12:00:00.000Z",
+      "images": []
+    },
+    {
+      "id": "example-dark-chocolate-pots",
+      "categoryId": "example-desserts",
+      "title": "Dark Chocolate Pots",
+      "description": "Small chilled chocolate desserts with a pinch of sea salt.",
+      "ingredients": [
+        "100 g dark chocolate",
+        "150 ml double cream",
+        "50 ml milk",
+        "1 pinch flaky sea salt"
+      ],
+      "steps": [
+        {
+          "text": "Chop the chocolate and place it in a heatproof bowl. Warm the cream and milk until steaming.",
+          "minutes": 0
+        },
+        {
+          "text": "Pour the hot cream mixture over the chocolate. Let it sit, then stir until smooth.",
+          "minutes": 2
+        },
+        {
+          "text": "Divide between small ramekins. Chill for at least two hours and finish with sea salt.",
+          "minutes": 0
+        }
+      ],
+      "notes": "This recipe makes four small servings.",
+      "createdAt": "2026-11-01T12:00:00.000Z",
+      "updatedAt": "2026-11-01T12:00:00.000Z",
+      "images": []
+    }
+  ],
+  "history": [
+    {
+      "recipeId": "example-blueberry-overnight-oats",
+      "date": "2026-11-02"
+    },
+    {
+      "recipeId": "example-lemon-chickpea-salad",
+      "date": "2026-11-05"
+    },
+    {
+      "recipeId": "example-apple-and-oat-crumble",
+      "date": "2026-11-07"
+    },
+    {
+      "recipeId": "example-mushroom-and-spinach-toast",
+      "date": "2026-11-09"
+    },
+    {
+      "recipeId": "example-warm-beetroot-and-lentil-salad",
+      "date": "2026-11-11"
+    },
+    {
+      "recipeId": "example-blueberry-overnight-oats",
+      "date": "2026-11-13"
+    },
+    {
+      "recipeId": "example-dark-chocolate-pots",
+      "date": "2026-11-13"
+    },
+    {
+      "recipeId": "example-lemon-chickpea-salad",
+      "date": "2026-11-15"
+    },
+    {
+      "recipeId": "example-apple-and-oat-crumble",
+      "date": "2026-11-16"
+    },
+    {
+      "recipeId": "example-mushroom-and-spinach-toast",
+      "date": "2026-11-17"
+    }
+  ]
+}

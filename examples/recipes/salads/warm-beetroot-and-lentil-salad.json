@@ -1,0 +1,44 @@
+{
+  "format": "here-we-stew-again",
+  "version": 1,
+  "exportedAt": "2026-11-17T12:00:00.000Z",
+  "categories": [
+    {
+      "id": "example-salads",
+      "name": "Salads",
+      "icon": "salad"
+    }
+  ],
+  "recipes": [
+    {
+      "id": "example-warm-beetroot-and-lentil-salad",
+      "categoryId": "example-salads",
+      "title": "Warm Beetroot and Lentil Salad",
+      "description": "Earthy beetroot, green lentils and a sharp mustard dressing.",
+      "ingredients": [
+        "250 g cooked beetroot",
+        "250 g cooked green lentils",
+        "1 tbsp olive oil",
+        "1 tbsp red wine vinegar",
+        "1 tsp Dijon mustard",
+        "1 handful rocket",
+        "30 g walnuts"
+      ],
+      "steps": [
+        {
+          "text": "Cut the beetroot into wedges and warm it with the lentils in a frying pan over medium heat.",
+          "minutes": 5
+        },
+        {
+          "text": "Whisk the olive oil, vinegar and mustard. Toss with the warm lentils and beetroot, then fold in the rocket and walnuts.",
+          "minutes": 0
+        }
+      ],
+      "notes": "Swap walnuts for pumpkin seeds if you prefer.",
+      "createdAt": "2026-11-01T12:00:00.000Z",
+      "updatedAt": "2026-11-01T12:00:00.000Z",
+      "images": []
+    }
+  ],
+  "history": []
+}

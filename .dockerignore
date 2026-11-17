@@ -1,0 +1,16 @@
+.git
+.agents
+.codex
+.env
+.env.*
+data
+node_modules
+*.log
+kochbuch-*.json
+cookbook-*.json
+recipe-*.json
+**/kochbuch.sqlite
+**/kochbuch.sqlite-*
+docs
+examples
+test

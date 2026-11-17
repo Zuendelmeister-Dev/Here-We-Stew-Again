@@ -1,0 +1,47 @@
+{
+  "format": "here-we-stew-again",
+  "version": 1,
+  "exportedAt": "2026-11-17T12:00:00.000Z",
+  "categories": [
+    {
+      "id": "example-breakfast",
+      "name": "Breakfast",
+      "icon": "breakfast"
+    }
+  ],
+  "recipes": [
+    {
+      "id": "example-mushroom-and-spinach-toast",
+      "categoryId": "example-breakfast",
+      "title": "Mushroom and Spinach Toast",
+      "description": "Buttery mushrooms and wilted spinach on toasted sourdough.",
+      "ingredients": [
+        "200 g mushrooms",
+        "1 tbsp butter",
+        "1 garlic clove",
+        "2 handfuls baby spinach",
+        "2 slices sourdough",
+        "Salt and black pepper"
+      ],
+      "steps": [
+        {
+          "text": "Slice the mushrooms. Fry them in the butter over medium-high heat until golden.",
+          "minutes": 7
+        },
+        {
+          "text": "Add the chopped garlic and spinach. Stir until the spinach wilts, then season.",
+          "minutes": 2
+        },
+        {
+          "text": "Toast the bread and spoon the mushrooms and spinach over it.",
+          "minutes": 0
+        }
+      ],
+      "notes": "A squeeze of lemon brightens the mushrooms.",
+      "createdAt": "2026-11-01T12:00:00.000Z",
+      "updatedAt": "2026-11-01T12:00:00.000Z",
+      "images": []
+    }
+  ],
+  "history": []
+}

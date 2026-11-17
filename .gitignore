@@ -1,0 +1,11 @@
+/data/
+/node_modules/
+/.env
+/.env.*
+!/.env.example
+*.log
+/kochbuch-*.json
+/cookbook-*.json
+/recipe-*.json
+kochbuch.sqlite
+kochbuch.sqlite-*

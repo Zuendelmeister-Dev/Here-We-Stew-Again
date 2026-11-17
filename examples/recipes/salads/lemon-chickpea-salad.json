@@ -1,0 +1,44 @@
+{
+  "format": "here-we-stew-again",
+  "version": 1,
+  "exportedAt": "2026-11-17T12:00:00.000Z",
+  "categories": [
+    {
+      "id": "example-salads",
+      "name": "Salads",
+      "icon": "salad"
+    }
+  ],
+  "recipes": [
+    {
+      "id": "example-lemon-chickpea-salad",
+      "categoryId": "example-salads",
+      "title": "Lemon Chickpea Salad",
+      "description": "A bright pantry salad with cucumber, parsley and a lemon dressing.",
+      "ingredients": [
+        "1 can chickpeas, drained",
+        "1/2 cucumber",
+        "150 g cherry tomatoes",
+        "1 handful parsley",
+        "2 tbsp olive oil",
+        "1 tbsp lemon juice",
+        "Salt and black pepper"
+      ],
+      "steps": [
+        {
+          "text": "Dice the cucumber, halve the tomatoes and chop the parsley.",
+          "minutes": 0
+        },
+        {
+          "text": "Whisk the olive oil and lemon juice with salt and pepper. Toss with the chickpeas and vegetables.",
+          "minutes": 0
+        }
+      ],
+      "notes": "Add crumbled feta just before serving if you like.",
+      "createdAt": "2026-11-01T12:00:00.000Z",
+      "updatedAt": "2026-11-01T12:00:00.000Z",
+      "images": []
+    }
+  ],
+  "history": []
+}

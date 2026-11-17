@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <style>
+    @media (prefers-color-scheme: dark) {
+      .spine-stop { stop-color: #2c4636; }
+      .cover-stop { stop-color: #486c55; }
+      .paper { fill: #f3e2c0; }
+      .long-ribbon { fill: #cd8964; }
+      .short-ribbon { fill: #dfaa84; }
+    }
+    @media (max-width: 20px) {
+      .fork-handle {
+        transform: scaleX(1.5);
+        transform-box: fill-box;
+        transform-origin: center;
+      }
+      .knife-handle {
+        transform: scaleX(1.35);
+        transform-box: fill-box;
+        transform-origin: right;
+      }
+    }
+  </style>
+  <defs>
+    <linearGradient id="cover">
+      <stop class="spine-stop" offset="17%" stop-color="#273f33"/>
+      <stop class="cover-stop" offset="17%" stop-color="#365343"/>
+    </linearGradient>
+  </defs>
+  <path fill="url(#cover)" d="M23.36 8H81.08A5.92 6.08 0 0 1 87 14.08V75.64A8.14 8.36 0 0 1 78.86 84H23.36A10.36 10.64 0 0 1 13 73.36V18.64A10.36 10.64 0 0 1 23.36 8Z"/>
+  <g class="paper" fill="#f4e7cd">
+    <ellipse cx="26.5" cy="41.5" rx="1.5" ry="25.5" opacity=".5"/>
+    <path d="M31.2 70H78A6 1 0 0 1 84 71V78.8A7.2 1.2 0 0 1 76.8 80H34.8A10.8 1.8 0 0 1 24 78.2V71.2A7.2 1.2 0 0 1 31.2 70Z"/>
+    <path d="M39.02 18H40.89V32.78H44.97V18H48.03V32.78H52.11V18H53.98A1.02 1.53 0 0 1 55 19.53V31.76A7.82 11.72 0 0 1 47.18 43.48H45.82A7.82 11.72 0 0 1 38 31.76V19.53A1.02 1.53 0 0 1 39.02 18Z"/>
+    <rect class="fork-handle" x="44.46" y="40.54" width="4.08" height="26.46" rx="2.04"/>
+    <path d="M71.77 18A1.23 2.43 0 0 1 73 20.43V41.54A.925 2.43 0 0 1 72.075 43.97H63.44A1.44 3.88 0 0 1 62 40.09V34.5A9.77 16.5 0 0 1 71.77 18Z"/>
+    <path class="knife-handle" d="M68.93 41.52H73V64.965A2.035 2.035 0 0 1 68.93 64.965Z"/>
+  </g>
+  <path class="long-ribbon" fill="#8b4e37" d="M57 72H70V95L63.5 89.48 57 95Z"/>
+  <path class="short-ribbon" fill="#a86645" d="M47 73H56V90L51.5 85.92 47 90Z"/>
+</svg>

@@ -1,0 +1,164 @@
+.book-hero {
+  min-height: clamp(315px, 24vw, 404px);
+  background: #2d1c12;
+}
+
+.book-hero::before {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  content: '';
+  pointer-events: none;
+  background: linear-gradient(90deg, #26160c 1%, #28180de6 16%, #28180d88 29%, #28180d26 42%, transparent 58%);
+}
+
+.book-hero .hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 44%;
+  pointer-events: none;
+}
+
+.book-hero .hero-button { pointer-events: auto; }
+
+.hero-scene-frame {
+  position: absolute;
+  inset: 0 0 0 11%;
+  overflow: hidden;
+  container-type: size;
+}
+
+.hero-scene {
+  position: absolute;
+  top: 46%;
+  left: 50%;
+  width: 100%;
+  width: max(100%, 150cqh);
+  aspect-ratio: 3 / 2;
+  transform: translate(-50%, -46%);
+  background: var(--book-photo, url('/images/kochbuch.jpg')) center / 100% 100% no-repeat;
+}
+
+.hero-leaf-summary {
+  position: absolute;
+  top: var(--summary-top, 51%);
+  left: var(--summary-left, 49%);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 13%;
+  padding: 6px 0;
+  border-block: 1px solid #6e4f3444;
+  color: #513821;
+  font-family: var(--serif);
+  font-size: clamp(11px, 1.45cqw, 20px);
+  font-style: italic;
+  line-height: 1.3;
+  transform: matrix(1, var(--summary-rise, -.19), var(--summary-lean, .23), 1, 0, 0);
+  transform-origin: left top;
+}
+
+.hero-book-action {
+  position: absolute;
+  inset: 0;
+  clip-path: var(--book-outline, polygon(33% 31%, 60% 25%, 83.6% 20.5%, 95% 67.5%, 62% 79%, 38.5% 83%));
+  mix-blend-mode: multiply;
+}
+
+.hero-leaf-feature {
+  --print-top-default: 37%;
+  position: absolute;
+  top: var(--print-top, var(--print-top-default));
+  left: var(--print-left, 63.6%);
+  width: var(--print-width, 21.5%);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: clamp(3px, .7cqw, 10px);
+  padding: 3px 4px;
+  border-radius: 3px;
+  color: #372819;
+  transform: matrix(1, var(--print-rise, -.20), var(--print-lean, .29), 1, 0, 0);
+  transform-origin: left top;
+}
+
+.hero-leaf-category {
+  max-width: 100%;
+  overflow: hidden;
+  color: #584128;
+  font-size: clamp(8px, 1cqw, 13px);
+  font-weight: 700;
+  line-height: 1.12;
+  letter-spacing: .11em;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.hero-leaf-title {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  font-family: var(--serif);
+  font-size: clamp(16px, 2.3cqw, 30px);
+  font-weight: 700;
+  line-height: 1.06;
+  letter-spacing: -.033em;
+  overflow-wrap: anywhere;
+}
+
+.hero-leaf-photo {
+  width: 78%;
+  aspect-ratio: 2.1;
+  object-fit: cover;
+  filter: saturate(.82) contrast(.92);
+  opacity: .94;
+}
+
+.hero-leaf-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: #49331d;
+  font-size: clamp(9px, 1.2cqw, 15px);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.hero-book-action:hover .hero-leaf-action { text-decoration: underline; }
+.hero-book-action:focus-visible .hero-leaf-feature { outline: 2px solid #4e3420; outline-offset: 3px; }
+.hero-leaf-feature.without-photo { top: calc(var(--print-top, var(--print-top-default)) + 6%); }
+
+.hero-leaf-empty {
+  top: calc(var(--print-top, var(--print-top-default)) + 9%);
+  color: #523721;
+  font-family: var(--serif);
+  font-size: clamp(15px, 2cqw, 25px);
+  font-style: italic;
+}
+
+@media (min-width: 951px) and (max-width: 1320px) {
+  .book-hero h1 { font-size: clamp(40px, 4.4vw, 58px); }
+}
+
+@media (max-width: 950px) {
+  .book-hero { display: block; min-height: 0; padding: 0; }
+  .book-hero::before { display: none; }
+  .book-hero .hero-content {
+    max-width: none;
+    padding: 26px clamp(18px, 4.3vw, 40px) 17px;
+    background: linear-gradient(100deg, #26160c, #3b2415);
+  }
+  .book-hero .hero-content p { margin-block: 9px 16px; }
+  .hero-scene-frame { position: relative; inset: auto; inline-size: 100%; min-inline-size: 0; min-height: 205px; aspect-ratio: 2.2; }
+  .hero-scene { top: 50%; left: 110%; width: 148%; width: max(148%, 150cqh); transform: translate(-100%, -50%); }
+  .hero-leaf-feature { --print-top-default: 36%; width: var(--print-width, 20.5%); gap: clamp(4px, 1.2cqw, 8px); }
+  .hero-leaf-photo { width: 69%; }
+  .hero-leaf-title { font-size: clamp(14px, 3.65cqw, 26px); }
+}
+
+@media (max-width: 410px) {
+  .hero-leaf-feature { padding: 1px; }
+  .hero-leaf-action > svg { width: 10px; height: 10px; }
+}

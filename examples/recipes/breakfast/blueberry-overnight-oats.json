@@ -1,0 +1,42 @@
+{
+  "format": "here-we-stew-again",
+  "version": 1,
+  "exportedAt": "2026-11-17T12:00:00.000Z",
+  "categories": [
+    {
+      "id": "example-breakfast",
+      "name": "Breakfast",
+      "icon": "breakfast"
+    }
+  ],
+  "recipes": [
+    {
+      "id": "example-blueberry-overnight-oats",
+      "categoryId": "example-breakfast",
+      "title": "Blueberry Overnight Oats",
+      "description": "Oats, yoghurt and blueberries ready straight from the fridge.",
+      "ingredients": [
+        "60 g rolled oats",
+        "120 ml milk",
+        "2 tbsp plain yoghurt",
+        "1 tsp maple syrup",
+        "80 g blueberries"
+      ],
+      "steps": [
+        {
+          "text": "Stir the oats, milk, yoghurt and maple syrup together in a jar.",
+          "minutes": 0
+        },
+        {
+          "text": "Cover and refrigerate overnight. Stir again and top with blueberries before serving.",
+          "minutes": 0
+        }
+      ],
+      "notes": "Loosen with a splash of milk if the oats are too thick.",
+      "createdAt": "2026-11-01T12:00:00.000Z",
+      "updatedAt": "2026-11-01T12:00:00.000Z",
+      "images": []
+    }
+  ],
+  "history": []
+}

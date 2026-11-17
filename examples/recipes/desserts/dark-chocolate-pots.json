@@ -1,0 +1,45 @@
+{
+  "format": "here-we-stew-again",
+  "version": 1,
+  "exportedAt": "2026-11-17T12:00:00.000Z",
+  "categories": [
+    {
+      "id": "example-desserts",
+      "name": "Desserts",
+      "icon": "dessert"
+    }
+  ],
+  "recipes": [
+    {
+      "id": "example-dark-chocolate-pots",
+      "categoryId": "example-desserts",
+      "title": "Dark Chocolate Pots",
+      "description": "Small chilled chocolate desserts with a pinch of sea salt.",
+      "ingredients": [
+        "100 g dark chocolate",
+        "150 ml double cream",
+        "50 ml milk",
+        "1 pinch flaky sea salt"
+      ],
+      "steps": [
+        {
+          "text": "Chop the chocolate and place it in a heatproof bowl. Warm the cream and milk until steaming.",
+          "minutes": 0
+        },
+        {
+          "text": "Pour the hot cream mixture over the chocolate. Let it sit, then stir until smooth.",
+          "minutes": 2
+        },
+        {
+          "text": "Divide between small ramekins. Chill for at least two hours and finish with sea salt.",
+          "minutes": 0
+        }
+      ],
+      "notes": "This recipe makes four small servings.",
+      "createdAt": "2026-11-01T12:00:00.000Z",
+      "updatedAt": "2026-11-01T12:00:00.000Z",
+      "images": []
+    }
+  ],
+  "history": []
+}

@@ -1,0 +1,47 @@
+{
+  "format": "here-we-stew-again",
+  "version": 1,
+  "exportedAt": "2026-11-17T12:00:00.000Z",
+  "categories": [
+    {
+      "id": "example-desserts",
+      "name": "Desserts",
+      "icon": "dessert"
+    }
+  ],
+  "recipes": [
+    {
+      "id": "example-apple-and-oat-crumble",
+      "categoryId": "example-desserts",
+      "title": "Apple and Oat Crumble",
+      "description": "Soft cinnamon apples under a crisp oat topping.",
+      "ingredients": [
+        "4 apples",
+        "1 tsp ground cinnamon",
+        "75 g cold butter",
+        "80 g plain flour",
+        "50 g rolled oats",
+        "55 g brown sugar"
+      ],
+      "steps": [
+        {
+          "text": "Heat the oven to 190°C. Peel and slice the apples, then toss them with the cinnamon in a baking dish.",
+          "minutes": 0
+        },
+        {
+          "text": "Rub the butter into the flour. Stir in the oats and sugar, then scatter the mixture over the apples.",
+          "minutes": 0
+        },
+        {
+          "text": "Bake until the topping is golden and the apples are tender.",
+          "minutes": 30
+        }
+      ],
+      "notes": "Serve warm with plain yoghurt, custard or ice cream.",
+      "createdAt": "2026-11-01T12:00:00.000Z",
+      "updatedAt": "2026-11-01T12:00:00.000Z",
+      "images": []
+    }
+  ],
+  "history": []
+}
